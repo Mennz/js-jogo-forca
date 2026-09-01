@@ -19,6 +19,17 @@ const letrasTentadas = [];
 const maxErros = 6;
 let erros = 0;
 
+// um desenho pra cada quantidade de erros, de 0 ate o maximo
+const desenhosForca = [
+  "  +---+\n      |\n      |\n      |\n     ===",
+  "  +---+\n  O   |\n      |\n      |\n     ===",
+  "  +---+\n  O   |\n  |   |\n      |\n     ===",
+  "  +---+\n  O   |\n /|   |\n      |\n     ===",
+  "  +---+\n  O   |\n /|\\  |\n      |\n     ===",
+  "  +---+\n  O   |\n /|\\  |\n /    |\n     ===",
+  "  +---+\n  O   |\n /|\\  |\n / \\  |\n     ===",
+];
+
 function montarPalavraEscondida() {
   return palavraEscolhida
     .split("")
@@ -33,6 +44,7 @@ function palavraCompleta() {
 const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
 
 function perguntarLetra() {
+  console.log("\n" + desenhosForca[erros]);
   console.log("\n" + montarPalavraEscondida());
   console.log("erros: " + erros + "/" + maxErros + " | letras tentadas: " + letrasTentadas.join(", "));
   rl.question("Digite uma letra: ", (resposta) => {

@@ -16,6 +16,8 @@ const palavraEscolhida = palavras[indice];
 
 const letrasCertas = palavraEscolhida.split("").map(() => false);
 const letrasTentadas = [];
+const maxErros = 6;
+let erros = 0;
 
 function montarPalavraEscondida() {
   return palavraEscolhida
@@ -32,6 +34,7 @@ const rl = readline.createInterface({ input: process.stdin, output: process.stdo
 
 function perguntarLetra() {
   console.log("\n" + montarPalavraEscondida());
+  console.log("erros: " + erros + "/" + maxErros + " | letras tentadas: " + letrasTentadas.join(", "));
   rl.question("Digite uma letra: ", (resposta) => {
     const letra = resposta.toLowerCase();
 
@@ -42,12 +45,20 @@ function perguntarLetra() {
     }
     letrasTentadas.push(letra);
 
-    palavraEscolhida.split("").forEach((letraDaPalavra, i) => {
-      if (letraDaPalavra === letra) letrasCertas[i] = true;
-    });
+    const acertou = palavraEscolhida.includes(letra);
+    if (acertou) {
+      palavraEscolhida.split("").forEach((letraDaPalavra, i) => {
+        if (letraDaPalavra === letra) letrasCertas[i] = true;
+      });
+    } else {
+      erros++;
+    }
 
     if (palavraCompleta()) {
       console.log("\nvoce acertou: " + palavraEscolhida);
+      rl.close();
+    } else if (erros >= maxErros) {
+      console.log("\nvoce perdeu, a palavra era: " + palavraEscolhida);
       rl.close();
     } else {
       perguntarLetra();

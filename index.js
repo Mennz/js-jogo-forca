@@ -12,4 +12,13 @@ const palavras = [
 const indice = Math.floor(Math.random() * palavras.length);
 const palavraEscolhida = palavras[indice];
 
-console.log(palavraEscolhida);
+const letrasCertas = palavraEscolhida.split("").map(() => false);
+
+function montarPalavraEscondida() {
+  return palavraEscolhida
+    .split("")
+    .map((letra, i) => (letrasCertas[i] ? letra : "_"))
+    .join(" ");
+}
+
+console.log(montarPalavraEscondida());

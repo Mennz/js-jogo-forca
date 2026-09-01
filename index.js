@@ -50,6 +50,12 @@ function perguntarLetra() {
   rl.question("Digite uma letra: ", (resposta) => {
     const letra = resposta.toLowerCase();
 
+    if (letra.length !== 1 || letra < "a" || letra > "z") {
+      console.log("digite so uma letra do alfabeto");
+      perguntarLetra();
+      return;
+    }
+
     if (letrasTentadas.includes(letra)) {
       console.log("voce ja tentou essa letra");
       perguntarLetra();
@@ -67,10 +73,12 @@ function perguntarLetra() {
     }
 
     if (palavraCompleta()) {
-      console.log("\nvoce acertou: " + palavraEscolhida);
+      console.log("\n" + desenhosForca[erros]);
+      console.log("\nvoce ganhou! a palavra era: " + palavraEscolhida);
       rl.close();
     } else if (erros >= maxErros) {
-      console.log("\nvoce perdeu, a palavra era: " + palavraEscolhida);
+      console.log("\n" + desenhosForca[erros]);
+      console.log("\nvoce perdeu. a palavra era: " + palavraEscolhida);
       rl.close();
     } else {
       perguntarLetra();

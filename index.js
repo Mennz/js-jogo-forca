@@ -14,10 +14,10 @@ function salvarPlacar(placar) {
 }
 
 const categorias = {
-  frutas: ["abacaxi", "banana", "morango", "melancia", "laranja", "manga"],
-  tecnologia: ["computador", "javascript", "teclado", "internet", "software"],
-  natureza: ["montanha", "elefante", "floresta", "cachoeira", "vulcao"],
-  musica: ["guitarra", "bateria", "violao", "microfone", "orquestra"],
+  frutas: ["abacaxi", "banana", "morango", "melancia", "laranja", "açaí"],
+  tecnologia: ["computador", "javascript", "teclado", "internet", "código"],
+  natureza: ["montanha", "elefante", "floresta", "cachoeira", "vulcão"],
+  musica: ["guitarra", "bateria", "violão", "microfone", "orquestra"],
 };
 
 const nomesCategorias = Object.keys(categorias);
@@ -43,6 +43,9 @@ const desenhosForca = [
   "  +---+\n  O   |\n /|\\  |\n /    |\n     ===",
   "  +---+\n  O   |\n /|\\  |\n / \\  |\n     ===",
 ];
+
+// aceita acento pra palavra como "código" ou "açaí" funcionar direito
+const letrasValidas = "abcdefghijklmnopqrstuvwxyzáàâãéêíóôõúüç";
 
 function montarPalavraEscondida() {
   return palavraEscolhida
@@ -105,7 +108,7 @@ function perguntarLetra() {
       return;
     }
 
-    if (letra.length !== 1 || letra < "a" || letra > "z") {
+    if (letra.length !== 1 || !letrasValidas.includes(letra)) {
       console.log("digite so uma letra do alfabeto");
       perguntarLetra();
       return;

@@ -44,13 +44,42 @@ function palavraCompleta() {
 
 const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
 
+function darDica() {
+  const indicesEscondidos = [];
+  letrasCertas.forEach((certa, i) => {
+    if (!certa) indicesEscondidos.push(i);
+  });
+
+  const indiceRevelado = indicesEscondidos[Math.floor(Math.random() * indicesEscondidos.length)];
+  letrasCertas[indiceRevelado] = true;
+  erros++;
+  console.log("dica: a posicao " + (indiceRevelado + 1) + " e '" + palavraEscolhida[indiceRevelado] + "'");
+
+  if (palavraCompleta()) {
+    console.log("\n" + desenhosForca[erros]);
+    console.log("\nvoce ganhou! a palavra era: " + palavraEscolhida);
+    rl.close();
+  } else if (erros >= maxErros) {
+    console.log("\n" + desenhosForca[erros]);
+    console.log("\nvoce perdeu. a palavra era: " + palavraEscolhida);
+    rl.close();
+  } else {
+    perguntarLetra();
+  }
+}
+
 function perguntarLetra() {
   console.log("\n" + desenhosForca[erros]);
   console.log("\n" + montarPalavraEscondida());
   console.log("erros: " + erros + "/" + maxErros + " | letras tentadas: " + letrasTentadas.join(", "));
   console.log("categoria: " + categoriaEscolhida);
-  rl.question("Digite uma letra: ", (resposta) => {
+  rl.question("Digite uma letra (ou 'dica', custa uma tentativa): ", (resposta) => {
     const letra = resposta.toLowerCase();
+
+    if (letra === "dica") {
+      darDica();
+      return;
+    }
 
     if (letra.length !== 1 || letra < "a" || letra > "z") {
       console.log("digite so uma letra do alfabeto");

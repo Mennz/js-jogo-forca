@@ -1,4 +1,17 @@
 const readline = require("readline");
+const fs = require("fs");
+const path = require("path");
+
+const caminhoPlacar = path.join(__dirname, "placar.json");
+
+function lerPlacar() {
+  if (!fs.existsSync(caminhoPlacar)) return { vitorias: 0, derrotas: 0 };
+  return JSON.parse(fs.readFileSync(caminhoPlacar, "utf-8"));
+}
+
+function salvarPlacar(placar) {
+  fs.writeFileSync(caminhoPlacar, JSON.stringify(placar, null, 2));
+}
 
 const categorias = {
   frutas: ["abacaxi", "banana", "morango", "melancia", "laranja", "manga"],
@@ -44,6 +57,21 @@ function palavraCompleta() {
 
 const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
 
+function finalizarJogo(venceu) {
+  console.log("\n" + desenhosForca[erros]);
+  const placar = lerPlacar();
+  if (venceu) {
+    console.log("\nvoce ganhou! a palavra era: " + palavraEscolhida);
+    placar.vitorias++;
+  } else {
+    console.log("\nvoce perdeu. a palavra era: " + palavraEscolhida);
+    placar.derrotas++;
+  }
+  salvarPlacar(placar);
+  console.log("placar: " + placar.vitorias + " vitorias, " + placar.derrotas + " derrotas");
+  rl.close();
+}
+
 function darDica() {
   const indicesEscondidos = [];
   letrasCertas.forEach((certa, i) => {
@@ -56,13 +84,9 @@ function darDica() {
   console.log("dica: a posicao " + (indiceRevelado + 1) + " e '" + palavraEscolhida[indiceRevelado] + "'");
 
   if (palavraCompleta()) {
-    console.log("\n" + desenhosForca[erros]);
-    console.log("\nvoce ganhou! a palavra era: " + palavraEscolhida);
-    rl.close();
+    finalizarJogo(true);
   } else if (erros >= maxErros) {
-    console.log("\n" + desenhosForca[erros]);
-    console.log("\nvoce perdeu. a palavra era: " + palavraEscolhida);
-    rl.close();
+    finalizarJogo(false);
   } else {
     perguntarLetra();
   }
@@ -104,17 +128,16 @@ function perguntarLetra() {
     }
 
     if (palavraCompleta()) {
-      console.log("\n" + desenhosForca[erros]);
-      console.log("\nvoce ganhou! a palavra era: " + palavraEscolhida);
-      rl.close();
+      finalizarJogo(true);
     } else if (erros >= maxErros) {
-      console.log("\n" + desenhosForca[erros]);
-      console.log("\nvoce perdeu. a palavra era: " + palavraEscolhida);
-      rl.close();
+      finalizarJogo(false);
     } else {
       perguntarLetra();
     }
   });
 }
+
+const placarAtual = lerPlacar();
+console.log("placar atual: " + placarAtual.vitorias + " vitorias, " + placarAtual.derrotas + " derrotas");
 
 perguntarLetra();

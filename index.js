@@ -1,15 +1,16 @@
 const readline = require("readline");
 
-const palavras = [
-  "abacaxi",
-  "computador",
-  "javascript",
-  "montanha",
-  "elefante",
-  "biblioteca",
-  "guitarra",
-  "foguete",
-];
+const categorias = {
+  frutas: ["abacaxi", "banana", "morango", "melancia", "laranja", "manga"],
+  tecnologia: ["computador", "javascript", "teclado", "internet", "software"],
+  natureza: ["montanha", "elefante", "floresta", "cachoeira", "vulcao"],
+  musica: ["guitarra", "bateria", "violao", "microfone", "orquestra"],
+};
+
+const nomesCategorias = Object.keys(categorias);
+const indiceCategoria = Math.floor(Math.random() * nomesCategorias.length);
+const categoriaEscolhida = nomesCategorias[indiceCategoria];
+const palavras = categorias[categoriaEscolhida];
 
 const indice = Math.floor(Math.random() * palavras.length);
 const palavraEscolhida = palavras[indice];
@@ -47,6 +48,7 @@ function perguntarLetra() {
   console.log("\n" + desenhosForca[erros]);
   console.log("\n" + montarPalavraEscondida());
   console.log("erros: " + erros + "/" + maxErros + " | letras tentadas: " + letrasTentadas.join(", "));
+  console.log("categoria: " + categoriaEscolhida);
   rl.question("Digite uma letra: ", (resposta) => {
     const letra = resposta.toLowerCase();
 
